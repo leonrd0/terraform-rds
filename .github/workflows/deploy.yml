@@ -3,20 +3,25 @@ name: Deploy Terraform
 
 on:
   push:
-    branches: [main]
+    tags: 
+        - 'release'
 
 jobs:
   deploy:
     name: Deploy
-    runs-on: [self-hosted, linux, x64]  # Usando self-hosted para que você possa personalizar o ambiente, se necessário
+    runs-on: [self-hosted, linux, x64]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Using config.sh
+        run: |
+            ./config.sh        
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: latest  # Usando a versão mais recente do Terraform
+          terraform_version: latest
 
       - name: Terraform Init
         run: terraform init
